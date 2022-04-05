@@ -21,10 +21,10 @@ model = load_model()
 
 
 # ===== WEB APPLICATION ======
-app = Flask(__name__)
+app = Flask(__name__, template_folder="./templates")
 
-@app.route('/')
-@app.route('/index')
+@app.route('/', methods = ["GET", "POST"])
+@app.route('/index', methods = ["GET", "POST"])
 
 def index():
     # Visualizations
