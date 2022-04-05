@@ -2,4 +2,4 @@
 /data/disaster_categories.csv
 /data/disaster_messages.csv
 /data/process_data.py
-/data/DisasterResponse.db
+/data/DisasterResponse.csv
