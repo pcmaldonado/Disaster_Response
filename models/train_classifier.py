@@ -16,10 +16,23 @@ import time
 # To save model
 import joblib
 
+# To preprocess text data
+import nltk
+nltk.download('punkt')
+nltk.download('wordnet')
+nltk.download('stopwords')
+nltk.download('omw-1.4')
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
+from nltk.stem.porter import PorterStemmer
+
+import re
+
 # To access configuration 
 import sys; sys.path.append('.')
 from config.core import DATASET_DIR, TRAINED_MODEL_DIR, config
-from models.functions import tokenize
+
 
 # ===== FUNCTIONS ======
 def prepare_data():
@@ -51,6 +64,36 @@ def prepare_data():
     return X_train, X_test, y_train, y_test
 
 
+def tokenize(text):
+    '''Normalize and tokenize input text,
+    then applies stemming and lemmatization,
+    finally returns cleaned text
+    
+    Arguments:
+        text: 'str' input text to be transformed
+    Returns:
+        text: 'str' cleaned text ready for modeling
+    '''
+    
+    # Makes all text lowercase then keeps only alphabetical characters
+    text = text.lower()
+    text = re.sub(r'[^a-zA-Z]',' ',text)
+    
+    # Tokenize text 
+    text = word_tokenize(text)
+    
+    # Stopwords
+    omit = ['no', 'but']
+    text = [t for t in text if t not in set(stopwords.words('english')) - set(omit)]
+    
+    # Stemming text
+    text = [PorterStemmer().stem(t) for t in text]
+
+    # Lemmatize text
+    text = [WordNetLemmatizer().lemmatize(t) for t in text]
+    
+    return text
+
 
 def build_model():
     # ML pipeline
@@ -68,9 +111,9 @@ def build_model():
                     ])
      
     param_grid = {
-        'vect__max_df': (0.7, 0.8), #Ignore terms that have a frequency higher than the given threshold
+        'vect__max_df': (0.65, 0.75), #Ignore terms that have a frequency higher than the given threshold
         'tfidf__use_idf': (True, False), #Enable inverse-document-frequency reweighting
-        'clf__max_features': ['sqrt', 'log2'], #Number of features to consider when looking for the best split
+        'clf__min_samples_split': [2, 3], #The minimum number of samples required to split an internal node
     }
     
     scorer = make_scorer(f1_score, average='weighted', zero_division=0)
@@ -148,7 +191,7 @@ def export_model(model):
 
 def run_pipeline():
     """Runs the entire ML pipeline: data preparation, 
-        model training, model validation and model
+        model training, model validation and model saving
 
     Arguments:
         None

@@ -8,5 +8,4 @@ pydantic==1.9.0
 scikit_learn==1.0.2
 SQLAlchemy==1.4.34
 strictyaml==1.6.1
-gunicorn==20.1.0
 itsdangerous==2.0.1

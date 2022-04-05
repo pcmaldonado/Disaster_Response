@@ -8,10 +8,11 @@ import json
 
 # To access configuration 
 import sys; sys.path.append('.')
-# from models.train_classifier import nlp_pipeline #needed to load model without errors
+from models.train_classifier import tokenize #needed to load model without errors
 
-# Functions needed to run this script
-from models.functions import load_model, return_figures, load_clean_data, tokenize
+# Functions needed to run this script 
+from functions import load_clean_data, load_model, return_figures
+
 
 
 # ===== GETTING THE DATA ======
@@ -25,10 +26,18 @@ model = load_model()
 # ===== WEB APPLICATION ======
 app = Flask(__name__, template_folder="./templates")
 
+
 @app.route('/', methods = ["GET", "POST"])
 @app.route('/index', methods = ["GET", "POST"])
 
+
 def index():
+    """Defines index and call for figures to display
+    Arguments:
+        None
+    Returns:
+        render_template with html template and plotly figures
+    """
     # Visualizations
     figures = return_figures()
 
@@ -46,6 +55,12 @@ def index():
 # web page that handles user query and displays model results
 @app.route('/go')
 def go():
+    """Defines "go", where new input message is 
+    classified using trained model
+    Arguments: 
+        None
+    Returns: render_template with html template, 
+            user input query and classification results """
     # save user input in query
     query = request.args.get('query', '') 
 
@@ -60,12 +75,23 @@ def go():
                         classification_result=classification_results
                     )
 
+
 @app.route('/about')
 def about():
+    """Defines "about" to display more information about the project
+    Arguments: 
+        None
+    Returns:
+        render_template with html template
+    """
     return render_template('about.html')
 
+
 def main():
-    app.run()
+    """Runs the web application"""
+    app.run(host='0.0.0.0', port=3000, debug=True)
+
 
 if __name__ == '__main__':
+    # Runs app
     main()
