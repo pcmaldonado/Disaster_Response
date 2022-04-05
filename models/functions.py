@@ -55,11 +55,12 @@ def tokenize(text):
 
 
 def load_clean_data():
-    # database_file_name = config.app_config.database_file_name
-    # table_name = config.app_config.table_name
-    # engine = create_engine(f'sqlite:///{DATASET_DIR}\\{database_file_name}')
-    # df = pd.read_sql_table(f'{table_name}', engine)
-    df = pd.read_csv(DATASET_DIR / 'DisasterResponse.csv')
+    database_file_name = config.app_config.database_file_name
+    table_name = config.app_config.table_name
+    engine = create_engine(f'sqlite:///{DATASET_DIR}\\{database_file_name}')
+    df = pd.read_sql_table(f'{table_name}', engine)
+    # df = pd.read_csv(DATASET_DIR / 'DisasterResponse.csv')
+    
     # Separate features from targets
     features = df[config.model_config.features]
     targets = df[config.model_config.targets]
