@@ -6,13 +6,12 @@ from flask import Flask, render_template, request
 import plotly
 import json
 
-# Functions needed to run this script
-from functions import load_model, return_figures, load_clean_data
-
 # To access configuration 
 import sys; sys.path.append('.')
 from models.train_classifier import nlp_pipeline #needed to load model without errors
 
+# Functions needed to run this script
+from models.functions import load_model, return_figures, load_clean_data
 
 
 # ===== GETTING THE DATA ======
