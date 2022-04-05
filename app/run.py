@@ -49,7 +49,7 @@ def nlp_pipeline(text):
     
     return text
 
-    
+
 # ===== GETTING THE DATA ======
 # load data
 features, targets = load_clean_data()
@@ -103,7 +103,7 @@ def about():
     return render_template('about.html')
 
 def main():
-    app.run()
+    app.run(host='0.0.0.0', port=3001, debug=True)
 
 if __name__ == '__main__':
     main()
