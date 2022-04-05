@@ -14,7 +14,46 @@ import joblib
 import plotly.graph_objs as go
 
 
+# To preprocess text data
+import nltk
+nltk.download('punkt')
+nltk.download('wordnet')
+nltk.download('stopwords')
+nltk.download('omw-1.4')
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
+from nltk.stem.porter import PorterStemmer
+
+import re
+
+
 # ===== FUNCTIONS ======
+def nlp_pipeline(text):
+    '''Normalize and tokenize input text,
+    then applies stemming and lemmatization,
+    finally returns cleaned text'''
+    
+    # Makes all text lowercase then keeps only alphabetical characters
+    text = text.lower()
+    text = re.sub(r'[^a-zA-Z]',' ',text)
+    
+    # Tokenize text 
+    text = word_tokenize(text)
+    
+    # Stopwords
+    omit = ['no', 'but']
+    text = [t for t in text if t not in set(stopwords.words('english')) - set(omit)]
+    
+    # Stemming text
+    text = [PorterStemmer().stem(t) for t in text]
+
+    # Lemmatize text
+    text = [WordNetLemmatizer().lemmatize(t) for t in text]
+    
+    return text
+
+
 def load_clean_data():
     # database_file_name = config.app_config.database_file_name
     # table_name = config.app_config.table_name

@@ -11,43 +11,7 @@ import sys; sys.path.append('.')
 # from models.train_classifier import nlp_pipeline #needed to load model without errors
 
 # Functions needed to run this script
-from models.functions import load_model, return_figures, load_clean_data
-
-import nltk
-nltk.download('punkt')
-nltk.download('wordnet')
-nltk.download('stopwords')
-nltk.download('omw-1.4')
-from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
-from nltk.stem import WordNetLemmatizer
-from nltk.stem.porter import PorterStemmer
-
-# to clean input text
-import re
-def nlp_pipeline(text):
-    '''Normalize and tokenize input text,
-    then applies stemming and lemmatization,
-    finally returns cleaned text'''
-    
-    # Makes all text lowercase then keeps only alphabetical characters
-    text = text.lower()
-    text = re.sub(r'[^a-zA-Z]',' ',text)
-    
-    # Tokenize text 
-    text = word_tokenize(text)
-    
-    # Stopwords
-    omit = ['no', 'but']
-    text = [t for t in text if t not in set(stopwords.words('english')) - set(omit)]
-    
-    # Stemming text
-    text = [PorterStemmer().stem(t) for t in text]
-
-    # Lemmatize text
-    text = [WordNetLemmatizer().lemmatize(t) for t in text]
-    
-    return text
+from models.functions import load_model, return_figures, load_clean_data, nlp_pipeline
 
 
 # ===== GETTING THE DATA ======

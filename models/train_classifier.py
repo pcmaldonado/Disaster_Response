@@ -3,23 +3,6 @@
 import pandas as pd
 from sqlalchemy import create_engine
 
-# To access configuration 
-import sys; sys.path.append('.')
-from config.core import DATASET_DIR, TRAINED_MODEL_DIR, config
-
-# To preprocess text data
-import nltk
-nltk.download('punkt')
-nltk.download('wordnet')
-nltk.download('stopwords')
-nltk.download('omw-1.4')
-from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
-from nltk.stem import WordNetLemmatizer
-from nltk.stem.porter import PorterStemmer
-
-import re
-
 # To build ML pipeline
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
@@ -33,6 +16,10 @@ import time
 # To save model
 import joblib
 
+# To access configuration 
+import sys; sys.path.append('.')
+from config.core import DATASET_DIR, TRAINED_MODEL_DIR, config
+from models.functions import nlp_pipeline
 
 # ===== FUNCTIONS ======
 def prepare_data():
@@ -57,30 +44,6 @@ def prepare_data():
     print('Data ready for modeling')
     return X_train, X_test, y_train, y_test
 
-    
-def nlp_pipeline(text):
-    '''Normalize and tokenize input text,
-    then applies stemming and lemmatization,
-    finally returns cleaned text'''
-    
-    # Makes all text lowercase then keeps only alphabetical characters
-    text = text.lower()
-    text = re.sub(r'[^a-zA-Z]',' ',text)
-    
-    # Tokenize text 
-    text = word_tokenize(text)
-    
-    # Stopwords
-    omit = ['no', 'but']
-    text = [t for t in text if t not in set(stopwords.words('english')) - set(omit)]
-    
-    # Stemming text
-    text = [PorterStemmer().stem(t) for t in text]
-
-    # Lemmatize text
-    text = [WordNetLemmatizer().lemmatize(t) for t in text]
-    
-    return text
 
 
 def build_model():
