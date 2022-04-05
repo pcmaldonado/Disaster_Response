@@ -1,3 +1,4 @@
+# Disaster Response Project
 # Overview
 As part of the <a href="https://www.udacity.com/course/data-scientist-nanodegree--nd025">Udacity Data Scientist Nanodegree Program</a>, this multioutput classification project aims to analyze and classify messages to improve communication during disasters, using data provided by <a href="https://appen.com/">Appen</a> (formally Figure 8) that contains real messages that were sent during disaster events.
 
@@ -15,7 +16,7 @@ It contains the raw data (messages and categories) in csv files, as well as the 
 
 It also contains the python script needed to apply the entire ETL process, process_data.py, which extracts data from csv files, transforms them and then loads them into a single SQLite database.
 
-To run this script on the command line, from the project folder:
+To run this script on the command line, from the project folder: <br>
 `python data/process_data.py`
 
 ## Models
@@ -23,7 +24,7 @@ It contains the python script that handles all the machine learning steps needed
 
 The directory also holds the pickle file containing the best model from the GridSearchCV done on the training set.
 
-To run the main script, *train_classifier.py* from the command line, on the project folder run this script: `python models/train_classifier.py`
+To run the main script, *train_classifier.py* from the command line, on the project folder run this script:<br> `python models/train_classifier.py`
 
 ## App
 It contains the scripts and necessary files to run the wep application.
