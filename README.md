@@ -27,6 +27,14 @@ The result should look like this:
 <img src="https://user-images.githubusercontent.com/84249222/161834342-bfbf160e-b758-4dd4-a687-3fe55ea6d913.png">
 </details>
 
+To run the app locally, as well as any other step of the project, it is recommended to create a new working environment and install the required libraries. For example, if using Anaconda:
+* `conda create -n <env_name>` then `conda activate <env_name>`
+* `conda install -c anaconda pip`
+* `pip install -r requirements.txt`
+
+Or simply (although it can generate a "PackagesNotFoundError"):
+* `conda create --name <env_name> --file requirements.txt` 
+
 # Directories
 
 ## Config
