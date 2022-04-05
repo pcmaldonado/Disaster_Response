@@ -11,7 +11,7 @@ import sys; sys.path.append('.')
 # from models.train_classifier import nlp_pipeline #needed to load model without errors
 
 # Functions needed to run this script
-from models.functions import load_model, return_figures, load_clean_data, nlp_pipeline
+from models.functions import load_model, return_figures, load_clean_data, tokenize
 
 
 # ===== GETTING THE DATA ======
@@ -20,8 +20,6 @@ features, targets = load_clean_data()
 
 # load model
 model = load_model()
-
-
 
 
 # ===== WEB APPLICATION ======

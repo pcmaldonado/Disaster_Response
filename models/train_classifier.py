@@ -19,13 +19,19 @@ import joblib
 # To access configuration 
 import sys; sys.path.append('.')
 from config.core import DATASET_DIR, TRAINED_MODEL_DIR, config
-from models.functions import nlp_pipeline
+from models.functions import tokenize
 
 # ===== FUNCTIONS ======
 def prepare_data():
-    """It loads the data from the SQL database,
+    """It loads the data from the SQLite database,
     separate targets and features, then splits train/test sets 
-    and returns X_train, X_test, y_train, y_test"""
+    and returns X_train, X_test, y_train, y_test
+    
+    Arguments:
+        None
+    Returns:
+        X_train, X_test, y_train, y_test: pandas dataframes containing training and test data
+    """
     # load data from database
     database_file_name = config.app_config.database_file_name
     table_name = config.app_config.table_name
@@ -48,8 +54,15 @@ def prepare_data():
 
 def build_model():
     # ML pipeline
-    """It builds the pipeline and sets the GridSearchCV parameters"""
-    model_pipeline = Pipeline([('vect', CountVectorizer(tokenizer=nlp_pipeline)), 
+    """It builds the pipeline and sets the GridSearchCV parameters
+    
+    Arguments:
+        None
+    Returns:
+        model_pipeline: sklearn pipeline containing NLP pipeline,
+                        RandomForestClassifier and GridSearchCV
+    """
+    model_pipeline = Pipeline([('vect', CountVectorizer(tokenizer=tokenize)), 
                      ('tfidf', TfidfTransformer()), 
                      ('clf', RandomForestClassifier(n_estimators=50, random_state=42, n_jobs=-1))
                     ])
@@ -67,26 +80,39 @@ def build_model():
 
 
 def train_model(X_train, y_train):
-    """Trains the model on the train set"""
+    """Trains the model on the train set
+    
+    Arguments:
+        X_train, y_train: pandas dataframe with training data
+    Returns:
+        model: sklearn model with best hyperparameters
+    """
    # Training Model
+    print('Training the ML model')
     model = build_model()
 
-    print('Training the ML model')
     startTime = time.time()
     model.fit(X_train, y_train)
-
-    # Getting best hyperparameteres from GridSearchCV
     print('Done training')
-
+    
+    # Getting best hyperparameteres from GridSearchCV
     executionTime = (time.time() - startTime)
     print('Execution time in minutes: ' + str(executionTime/60))
     print('Best hyperpameters:', model.best_params_)
     
-    return model
+    return model.best_estimator_
     
 
 def evaluate_model(model, X_test, y_test):
-    """Predicts on test data then shows performance metrics (weighted f1-score)"""
+    """Predicts on test data then shows performance metrics 
+    (weighted f1-score, recall & precision)
+    
+    Arguments:
+        model: sklearn model to use for prediction
+        X_test, y_test: pandas dataframe with test data
+    Returns:
+        None
+    """
     # Predicts on test data
     y_pred = model.predict(X_test)
     target_names = y_test.columns
@@ -105,7 +131,14 @@ def evaluate_model(model, X_test, y_test):
 
 
 def export_model(model):
-    """Saves model as pickle file"""
+    """Saves model as pickle file following configuration set path
+    (see config/core.py and config/config.yml)
+    
+    Arguments:
+        model: sklearn model to save
+    Returns:
+        None
+    """
     # Saving model
     save_file_name = f'{config.app_config.model_save_file}'
     save_path = TRAINED_MODEL_DIR / save_file_name
@@ -114,7 +147,14 @@ def export_model(model):
 
 
 def run_pipeline():
-    """Runs the entire ML pipeline"""
+    """Runs the entire ML pipeline: data preparation, 
+        model training, model validation and model
+
+    Arguments:
+        None
+    Returns:
+        None
+    """
     X_train, X_test, y_train, y_test = prepare_data()
     model = train_model(X_train, y_train)
     evaluate_model(model, X_test, y_test)

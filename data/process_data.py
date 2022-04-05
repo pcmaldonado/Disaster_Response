@@ -14,7 +14,14 @@ from config.core import DATASET_DIR, config
 
 # ===== FUNCTIONS ======
 def load_data(messages_file_name:str, categories_file_name:str):
-    """Loads and merge the messages & categories datasets"""
+    """Loads and merge the messages & categories datasets
+    
+    Arguments:
+        messages_file_name: name file of message data
+        categories_file_name: name file of categories data
+    Returns:
+        data: pandas dataframe
+    """
     # Loads datasets
     messages = pd.read_csv(Path(f'{DATASET_DIR/messages_file_name}'))
     categories = pd.read_csv(Path(f'{DATASET_DIR/categories_file_name}'))
@@ -26,8 +33,14 @@ def load_data(messages_file_name:str, categories_file_name:str):
 
 
 def clean_data(data):
-    """Loads data, split categories into multiple columns, 
-    then remove duplicates"""
+    """Loads data, splits categories into multiple columns, 
+    then removes duplicates
+    
+    Arguments: 
+        data: pandas dataframe
+    Returns:
+        data: pandas dataframe
+    """
     # ===== Transforming "Categories" ======
     # Splitting categories (one col) into n columns
     cats = data.categories.str.split(';', expand=True)
@@ -46,24 +59,37 @@ def clean_data(data):
     return data
 
 
-def save_data(df):
-    """Saves cleaned data into an sqlite database"""
+def save_data(data):
+    """Saves cleaned data into an SQLite database following 
+    configuration parameters for path file
+    
+    Arguments:
+        data: pandas dataframe
+    Returns:
+        None
+    """
     save_file_name = config.app_config.database_file_name
     table_name = config.app_config.table_name
     
     engine = create_engine(f'sqlite:///{DATASET_DIR}/{save_file_name}')
-    df.to_sql(f'{table_name}', engine, index=False, if_exists='replace')
+    data.to_sql(f'{table_name}', engine, index=False, if_exists='replace')
     
     
 def etl_process():
-    """Contains the 3 steps of the ETL pipeline"""
+    """Contains the 3 steps of the ETL pipeline
+    
+    Arguments:
+        None
+    Returns:
+        None
+    """
     df = load_data(messages_file_name = config.app_config.messages_file_name,
                    categories_file_name = config.app_config.categories_file_name)  
-    print('extracted data')
+    print('Data extraction complete')
     df = clean_data(df)
-    print('transformed data')
+    print('Data transformed correctly')
     save_data(df)
-    print('loaded data')
+    print('Loaded clean data into SQLite database')
     
     
 if __name__ == '__main__':

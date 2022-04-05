@@ -29,7 +29,7 @@ import re
 
 
 # ===== FUNCTIONS ======
-def nlp_pipeline(text):
+def tokenize(text):
     '''Normalize and tokenize input text,
     then applies stemming and lemmatization,
     finally returns cleaned text'''
