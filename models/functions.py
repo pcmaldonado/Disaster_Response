@@ -63,7 +63,7 @@ def load_clean_data():
 
     # To load data from csv file
     df = pd.read_csv(DATASET_DIR / 'DisasterResponse.csv')
-    print('dataset directory:', DATASET_DIR / 'DisasterResponse.csv')
+    print('dataset:', DATASET_DIR / 'DisasterResponse.csv')
     # Separate features from targets
     features = df[config.model_config.features]
     targets = df[config.model_config.targets]
