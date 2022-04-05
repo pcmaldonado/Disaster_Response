@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Disasters</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato&family=Mitr:wght@200;400&display=swap" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    
+    <link rel="stylesheet" href="../static/style.css" type="text/css">
+</head>
+
+<body>
+
+<!-- Navigation Bar -->
+<div class="navbar">
+    <div class="container">
+        <ul>
+            <div class="logo">
+                <li><a href="/">Disaster Response</a></li>
+            </div>
+            <li><a href="/about">About the Project</a></li>
+        </ul>
+    </div>
+</div>
+
+<main>
+    
+<!-- Classify new messages -->
+<div class="jumbotron">
+    <div class="container">
+        <h1 class="text-center">Disaster Response Project</h1>
+        <h3 class="text-center">Analyzing message data for disaster response</h3>
+        <hr />
+      
+        <div class="">
+            <div class="">
+                <form action="/go" method="get">
+                    <input type="text" name="query" autofocus placeholder="Enter a message to classify" autocomplete="off">
+                    <hr />
+                         <input type="submit", value = 'Classify Message'>   
+                </form>
+            </div>
+        </div>
+        {% block message %}
+        {% endblock %}
+    </div>
+</div>
+
+<!-- Visualizations -->
+<div class="viz">
+    <div class="container">
+        {% block content %}
+            <div class="page-header">
+                <h1 class="text-center">Overview of Training Dataset</h1>
+            </div>
+        {% endblock %}
+
+        {% for id in ids %}
+            <div id="{{id}}"></div>
+        {% endfor %}
+    </div>
+</div>
+</main>
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="footer-box">
+            <ul>
+                <li><a href="https://www.udacity.com/">Made with Udacity</a></li>
+                <li><a href="https://github.com/pcmaldonado/Disaster_Response">GitHub Repository</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+
+<script type="text/javascript">
+    const graphs = {{graphJSON | safe}};
+    const ids = {{ids | safe}};
+    for(let i in graphs) {
+        Plotly.plot(ids[i], graphs[i].data, graphs[i].layout);
+    }
+</script>
+
+</body>
+</html>

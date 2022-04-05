@@ -1,0 +1,12 @@
+Flask==2.1.1
+joblib==1.1.0
+nltk==3.7
+numpy==1.22.3
+pandas==1.4.2
+plotly==5.6.0
+pydantic==1.9.0
+scikit_learn==1.0.2
+SQLAlchemy==1.4.34
+strictyaml==1.6.1
+gunicorn==20.1.0
+itsdangerous==2.0.1
