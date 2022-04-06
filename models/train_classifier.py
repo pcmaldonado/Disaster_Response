@@ -71,11 +71,13 @@ def tokenize(text):
         text: 'str' cleaned text ready for modeling
     '''
     
-    # Makes all text lowercase then keeps only alphabetical characters
+    # Makes all text lowercase and removes whitespace
+    # Then keeps only alphabetical characters
+    text = text.lower().strip()
     text = re.sub(r'[^a-zA-Z]',' ',text)
     
-    # Tokenize and lowercase text and removes whitespace
-    text = word_tokenize(text).lower().strip()
+    # Tokenize text 
+    text = word_tokenize(text)
     
     # Lemmatize text
     text = [WordNetLemmatizer().lemmatize(t) for t in text]
