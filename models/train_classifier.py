@@ -48,8 +48,8 @@ def prepare_data():
     # load data from database
     database_file_name = config.app_config.database_file_name
     table_name = config.app_config.table_name
-    engine = create_engine(f'sqlite:///{DATASET_DIR}\\{database_file_name}')
-    df = pd.read_sql(f'SELECT * FROM {table_name}', engine)
+    engine = create_engine(f'sqlite:///{DATASET_DIR}\{database_file_name}')
+    df = pd.read_sql_table(f'{table_name}', engine)
 
     # Separate features from targets
     X = df[config.model_config.features]
