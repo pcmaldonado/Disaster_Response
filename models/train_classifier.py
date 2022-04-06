@@ -55,9 +55,6 @@ def prepare_data():
     X = df[config.model_config.features]
     y = df[config.model_config.targets]
     
-    # Simplification to avoid multiclass problems (plus, class 2 is highly imbalanced)
-    y['related'] = y['related'].replace({2:1})
-    
     # Splits data into train/test sets
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     print('Data ready for modeling')
@@ -66,8 +63,7 @@ def prepare_data():
 
 def tokenize(text):
     '''Normalize and tokenize input text,
-    then applies stemming and lemmatization,
-    finally returns cleaned text
+    then applies lemmatization, finally returns cleaned text
     
     Arguments:
         text: 'str' input text to be transformed
@@ -76,19 +72,11 @@ def tokenize(text):
     '''
     
     # Makes all text lowercase then keeps only alphabetical characters
-    text = text.lower()
     text = re.sub(r'[^a-zA-Z]',' ',text)
     
-    # Tokenize text 
-    text = word_tokenize(text)
+    # Tokenize and lowercase text and removes whitespace
+    text = word_tokenize(text).lower().strip()
     
-    # Stopwords
-    omit = ['no', 'but']
-    text = [t for t in text if t not in set(stopwords.words('english')) - set(omit)]
-    
-    # Stemming text
-    text = [PorterStemmer().stem(t) for t in text]
-
     # Lemmatize text
     text = [WordNetLemmatizer().lemmatize(t) for t in text]
     

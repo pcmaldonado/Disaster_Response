@@ -34,7 +34,7 @@ def load_data(messages_file_name:str, categories_file_name:str):
 
 def clean_data(data):
     """Loads data, splits categories into multiple columns, 
-    then removes duplicates
+    ensures targets are binary, and then removes duplicates
     
     Arguments: 
         data: pandas dataframe
@@ -52,6 +52,10 @@ def clean_data(data):
     # Concat categories with the rest of the data
     data = pd.concat([data.drop(['categories'], axis=1), cats], axis=1)
     
+    # The "related" category includes 3 unique values. To binarize
+    # this class, I'll assume "2" as "1" to not lose those observations
+    data['related'] = data['related'].replace({2:1})
+
     # ===== Removing duplicates ======
     # Removing unnecesary feature
     data = data.drop_duplicates()
