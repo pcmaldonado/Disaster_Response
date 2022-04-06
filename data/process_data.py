@@ -71,10 +71,8 @@ def save_data(data):
     save_file_name = config.app_config.database_file_name
     table_name = config.app_config.table_name
     
-    engine = create_engine(f'sqlite:///{DATASET_DIR}\{save_file_name}')
+    engine = create_engine(f'sqlite:///{DATASET_DIR}/{save_file_name}')
     data.to_sql(f'{table_name}', engine, index=False, if_exists='replace')
-
-    print(f'sqlite:///{DATASET_DIR}\{save_file_name}')
     
 
 def etl_process():

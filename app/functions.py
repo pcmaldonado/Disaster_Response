@@ -26,7 +26,7 @@ def load_clean_data():
     # To load data from SQLite database
     database_file_name = config.app_config.database_file_name
     table_name = config.app_config.table_name
-    engine = create_engine(f'sqlite:///{DATASET_DIR}\\{database_file_name}')
+    engine = create_engine(f'sqlite:///{DATASET_DIR}/{database_file_name}')
     df = pd.read_sql_table(f'{table_name}', engine)
 
     # Separate features from targets
